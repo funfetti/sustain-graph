@@ -1,0 +1,21 @@
+DataLoader Queries
+
+EUR
+
+Select Id, Name, RecordTypeId, sustain_app__Asset__c, sustain_app__EndDate__c, sustain_app__Month_Year__c, sustain_app__Owned_Asset__c, sustain_app__Scope1EmissionsTCO2e__c, sustain_app__Scope2LocationBasedEmissionsTCO2e__c, sustain_app__Scope2MarketBasedEmissionstCO2e__c, sustain_app__Scope_3_Emissions_tCO2e__c, sustain_app__StartDate__c FROM sustain_app__EnergyConsumption__c WHERE RecordTypeId = '0124W000001HW73QAG'
+
+OA 
+
+Select Id, Name, RecordTypeId, sustain_app__AssetType__c, sustain_app__BusinessRegion__c, sustain_app__Country__c FROM sustain_app__Asset__c 
+
+CF 
+
+Select Id, Name, RecordTypeId, sustain_app__Asset__c, sustain_app__PY_Annual_Consumption_Report__c, sustain_app__ReportingYear__c, sustain_app__Reporting_Date__c, sustain_app__Stage__c FROM sustain_app__ConsumptionReport__c 
+
+CFRI 
+
+SELECT Id,Name,sustain_app__ConsumptionReport__c,sustain_app__EnergyConsumption__c FROM sustain_app__ConsumptionReportItem__c WHERE sustain_app__ConsumptionReport__r.RecordTypeId = '0124W000001HW6fQAG'
+
+RecordType 
+
+SELECT Id, Name, DeveloperName, SobjectType FROM RecordType WHERE IsActive = TRUE 
