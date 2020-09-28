@@ -7,7 +7,7 @@ create constraint on (t:RecordType) ASSERT t.RecordTypeId is UNIQUE
 
 // load org assets 
 
-LOAD CSV WITH HEADERS FROM 'file:///oa.csv' as row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/funfetti/sustain-graph/master/oa.csv' as row
 MERGE (a:Asset {AssetId: row.ID, Name: row.NAME, AssetType: row.SUSTAIN_APP__ASSETTYPE__C, BusinessRegion: row.SUSTAIN_APP__BUSINESSREGION__C})
 MERGE (r:Region {Name: row.SUSTAIN_APP__BUSINESSREGION__C})
 MERGE (t:RecordType {RecordTypeId: row.RECORDTYPEID})
@@ -16,7 +16,7 @@ MERGE (a)-[:TYPE]->(t)
 
 // load energy use records and pair to assets 
 
-LOAD CSV WITH HEADERS FROM 'file:///eur.csv' as row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/funfetti/sustain-graph/master/eur.csv' as row
 MERGE (e:EUR {EURId: row.ID,
     Name: row.NAME, 
     Scope1: toFloat(row.SUSTAIN_APP__SCOPE1EMISSIONSTCO2E__C),
@@ -34,8 +34,11 @@ MERGE (t:RecordType {RecordTypeId: row.RECORDTYPEID})
 MERGE (e)-[:TYPE]->(t)
 
 // load and chain carbon footprint records 
+// to do: warning i recieved... The execution plan for this query contains the Eager operator, which forces all dependent data to be materialized in main memory before proceeding
+// Using LOAD CSV with a large data set in a query where the execution plan contains the Eager operator could potentially consume a lot of memory and is likely to not perform well. See the Neo4j Manual entry on the Eager operator for more information and hints on how problems could be avoided.
 
-LOAD CSV WITH HEADERS FROM 'file:///cf.csv' as row 
+
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/funfetti/sustain-graph/master/cf.csv' as row 
 MERGE (c:CF {CFId: row.ID,
     Name: row.NAME,
     Stage: row.SUSTAIN_APP__STAGE__C,
@@ -57,7 +60,7 @@ MERGE (n)-[:SUMMARY_OF]->(a)
 
 // load cfri
 
-LOAD CSV WITH HEADERS FROM 'file:///cfri.csv' as row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/funfetti/sustain-graph/master/cfri.csv' as row
 MATCH (c:CF {CFId: row.SUSTAIN_APP__CONSUMPTIONREPORT__C})
 MATCH (e:EUR {EURId: row.SUSTAIN_APP__ENERGYCONSUMPTION__C})
 MERGE (e)-[j:REPORT_ITEM_OF]->(c)
@@ -65,7 +68,7 @@ SET j.Name = row.NAME
 
 // add referenced record types 
 
-LOAD CSV WITH HEADERS FROM 'file:///rt.csv' as row 
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/funfetti/sustain-graph/master/rt.csv' as row 
 MATCH (t:RecordType {RecordTypeId: row.ID})
 SET t.Name = row.NAME, t.DeveloperName = row.DEVELOPERNAME, t.Object = row.SOBJECTTYPE
 
